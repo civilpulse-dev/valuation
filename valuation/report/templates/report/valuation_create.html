@@ -1,0 +1,233 @@
+{% extends "report/base.html" %}
+
+{% block title %}Create Valuation Report{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-plus-circle text-primary me-2"></i>Create Valuation Report</h2>
+    <a href="{% url 'report:valuation_list' %}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Back to List
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Valuation Report Information</h5>
+    </div>
+    <div class="card-body">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            
+            <!-- Display form errors at the top -->
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                <h6 class="alert-heading">Please correct the following errors:</h6>
+                <ul class="mb-0">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h6 class="border-bottom pb-2 text-primary">
+                        <i class="fas fa-university me-2"></i>Bank Details
+                    </h6>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Report Number *</label>
+                        {{ form.report_number }}
+                        {% if form.report_number.errors %}
+                        <div class="text-danger small mt-1">
+                            {% for error in form.report_number.errors %}
+                            <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="form-text">Use a unique report number like VAL-2025-001</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Bank Name *</label>
+                        {{ form.bank_name }}
+                        {% if form.bank_name.errors %}
+                        <div class="text-danger small mt-1">
+                            {% for error in form.bank_name.errors %}
+                            <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Bank Branch</label>
+                        {{ form.bank_branch }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Bank Reference No</label>
+                        {{ form.bank_ref_no }}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <h6 class="border-bottom pb-2 text-success">
+                        <i class="fas fa-user me-2"></i>Borrower Details
+                    </h6>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Borrower Name *</label>
+                        {{ form.borrower_name }}
+                        {% if form.borrower_name.errors %}
+                        <div class="text-danger small mt-1">
+                            {% for error in form.borrower_name.errors %}
+                            <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Contact Number</label>
+                        {{ form.borrower_contact }}
+                        {% if form.borrower_contact.errors %}
+                        <div class="text-danger small mt-1">
+                            {% for error in form.borrower_contact.errors %}
+                            <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="form-text">10-digit mobile number</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">PAN Number</label>
+                        {{ form.borrower_pan }}
+                        {% if form.borrower_pan.errors %}
+                        <div class="text-danger small mt-1">
+                            {% for error in form.borrower_pan.errors %}
+                            <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="form-text">10-character PAN number</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Valuation Date</label>
+                        {{ form.val_date }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h6 class="border-bottom pb-2 text-info">
+                        <i class="fas fa-map-marker-alt me-2"></i>Address Details
+                    </h6>
+                    <div class="mb-3">
+                        <label class="form-label">Bank Address</label>
+                        {{ form.bank_address }}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <h6 class="border-bottom pb-2 text-info">
+                        <i class="fas fa-map-marker-alt me-2"></i>&nbsp;
+                    </h6>
+                    <div class="mb-3">
+                        <label class="form-label">Borrower Address</label>
+                        {{ form.borrower_address }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="border-bottom pb-2 text-warning">
+                        <i class="fas fa-calendar me-2"></i>Additional Details
+                    </h6>
+                    <div class="mb-3">
+                        <label class="form-label">Bank Request Date</label>
+                        {{ form.bank_req_date }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 pt-3 border-top">
+                <button type="submit" class="btn btn-success btn-lg">
+                    <i class="fas fa-save me-2"></i>Create Valuation Report
+                </button>
+                <a href="{% url 'report:valuation_list' %}" class="btn btn-outline-secondary">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .form-control, .form-select {
+        border-radius: 0.375rem;
+        padding: 0.75rem 1rem;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: #3498db;
+        box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+    }
+    
+    textarea.form-control {
+        min-height: 80px;
+        resize: vertical;
+    }
+    
+    .form-text {
+        font-size: 0.875rem;
+        color: #6c757d;
+    }
+    
+    .border-bottom {
+        border-color: #e9ecef !important;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add input validation styling
+    const inputs = document.querySelectorAll('.form-control');
+    inputs.forEach(input => {
+        input.addEventListener('blur', function() {
+            if (this.value.trim() !== '') {
+                this.classList.add('is-valid');
+            } else if (this.required) {
+                this.classList.add('is-invalid');
+            }
+        });
+        
+        input.addEventListener('input', function() {
+            this.classList.remove('is-invalid', 'is-valid');
+        });
+    });
+    
+    // Auto-generate report number suggestion
+    const reportNumberField = document.getElementById('id_report_number');
+    if (reportNumberField) {
+        reportNumberField.addEventListener('focus', function() {
+            if (!this.value) {
+                const now = new Date();
+                const suggestion = `VAL-${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+                this.placeholder = suggestion;
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

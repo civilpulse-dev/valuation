@@ -1,0 +1,288 @@
+{% extends "report/base.html" %}
+
+{% block title %}Manage Property - {{ property_instance.name }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2><i class="fas fa-edit text-primary me-2"></i>Manage Property</h2>
+        <p class="text-muted mb-0">{{ property_instance.name }} - {{ property_instance.valuation.report_number }}</p>
+    </div>
+    <div>
+        <a href="{% url 'report:valuation_detail' property_instance.valuation.pk %}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to Report
+        </a>
+    </div>
+</div>
+
+<!-- Property Information -->
+<div class="card mb-4">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0"><i class="fas fa-home me-2"></i>Property Information</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Property Name:</strong> {{ property_instance.name }}</p>
+                <p><strong>District:</strong> {{ property_instance.district }}</p>
+                <p><strong>Land Type:</strong> {{ property_instance.get_land_type_display }}</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Municipality:</strong> {{ property_instance.municipality|default:"Not specified" }}</p>
+                <p><strong>Ward No:</strong> {{ property_instance.ward_no }}</p>
+                <p><strong>Address:</strong> {{ property_instance.address }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    
+    <!-- Owners Section -->
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="fas fa-users me-2"></i>Property Owners</h5>
+            <span class="badge bg-light text-dark">{{ owner_formset.total_form_count }} owner(s)</span>
+        </div>
+        <div class="card-body">
+            {{ owner_formset.management_form }}
+            <div id="owners-forms">
+                {% for form in owner_formset %}
+                <div class="owner-form border rounded p-3 mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="text-success mb-0">Owner {{ forloop.counter }}</h6>
+                        {% if owner_formset.can_delete %}
+                        <div class="form-check">
+                            {{ form.DELETE }}
+                            <label class="form-check-label text-danger" for="{{ form.DELETE.id_for_label }}">
+                                Remove Owner
+                            </label>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Owner Name</label>
+                                {{ form.name }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Contact Number</label>
+                                {{ form.contact_number }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Citizenship Number</label>
+                                {{ form.citizenship_number }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">PAN Number</label>
+                                {{ form.pan_number }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Address</label>
+                        {{ form.address }}
+                    </div>
+                    
+                    <!-- Hidden fields -->
+                    {{ form.id }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Plots Section -->
+    <div class="card mb-4">
+        <div class="card-header bg-warning text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="fas fa-map-marked-alt me-2"></i>Land Plots</h5>
+            <span class="badge bg-light text-dark">{{ plot_formset.total_form_count }} plot(s)</span>
+        </div>
+        <div class="card-body">
+            {{ plot_formset.management_form }}
+            <div id="plots-forms">
+                {% for form in plot_formset %}
+                <div class="plot-form border rounded p-3 mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="text-warning mb-0">Plot {{ forloop.counter }}</h6>
+                        {% if plot_formset.can_delete %}
+                        <div class="form-check">
+                            {{ form.DELETE }}
+                            <label class="form-check-label text-danger" for="{{ form.DELETE.id_for_label }}">
+                                Remove Plot
+                            </label>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Plot Identification -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Plot Number *</label>
+                                {{ form.plot_number }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Sheet Number</label>
+                                {{ form.sheet_number }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ropani System (Hilly Region) -->
+                    <h6 class="text-info mb-3">Ropani System (R-A-P-D)</h6>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Ropani</label>
+                            {{ form.ropani }}
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Ana (0-15)</label>
+                            {{ form.ana }}
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Paisa (0-3)</label>
+                            {{ form.paisa }}
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Dam (0-4)</label>
+                            {{ form.dam }}
+                        </div>
+                    </div>
+
+                    <!-- Bigha System (Terai Region) -->
+                    <h6 class="text-success mb-3">Bigha System (B-K-D)</h6>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Bigha</label>
+                            {{ form.bigha }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Kattha (0-19)</label>
+                            {{ form.kattha }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Dhur (0-19)</label>
+                            {{ form.dhur }}
+                        </div>
+                    </div>
+
+                    <!-- Direct Area Input -->
+                    <h6 class="text-primary mb-3">Direct Area Input</h6>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Area (Sq. Ft)</label>
+                            {{ form.area_sqft }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Area (Sq. M)</label>
+                            {{ form.area_sqmt }}
+                            <div class="form-text">Auto-calculated from sq.ft</div>
+                        </div>
+                    </div>
+
+                    <!-- Valuation Rates -->
+                    <h6 class="text-danger mb-3">Valuation Rates</h6>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Government Rate/Sq.Ft</label>
+                            {{ form.gov_rate_per_sqft }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Market Rate/Sq.Ft *</label>
+                            {{ form.market_rate_per_sqft }}
+                        </div>
+                    </div>
+
+                    <!-- Boundaries -->
+                    <h6 class="text-secondary mb-3">Boundaries</h6>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">North Boundary</label>
+                            {{ form.north_boundary }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">South Boundary</label>
+                            {{ form.south_boundary }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">East Boundary</label>
+                            {{ form.east_boundary }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">West Boundary</label>
+                            {{ form.west_boundary }}
+                        </div>
+                    </div>
+
+                    <!-- Remarks -->
+                    <div class="mb-3">
+                        <label class="form-label">Remarks</label>
+                        {{ form.remarks }}
+                    </div>
+
+                    <!-- Hidden fields -->
+                    {{ form.id }}
+                    
+                    <!-- Auto-calculated values display -->
+                    <div id="plot-calculations-{{ forloop.counter0 }}" class="mt-3 p-2 bg-light rounded">
+                        <small class="text-muted">Area and valuation will be calculated automatically after saving.</small>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Submit Section -->
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="text-success mb-0">
+                        <i class="fas fa-save me-2"></i>Save Changes
+                    </h5>
+                    <p class="text-muted mb-0">All area calculations and valuations will be updated automatically.</p>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="fas fa-save me-2"></i>Save Property
+                    </button>
+                    <a href="{% url 'report:valuation_detail' property_instance.valuation.pk %}" class="btn btn-outline-secondary">
+                        Cancel
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Include the dynamic forms JavaScript -->
+<script src="/static/report/js/dynamic_forms.js"></script>
+<script src="/static/report/js/area_calculator.js"></script>
+
+<style>
+.owner-form, .plot-form {
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.owner-form:hover, .plot-form:hover {
+    background: #e9ecef;
+    border-color: #007bff;
+}
+
+.form-check-label {
+    font-size: 0.875rem;
+}
+</style>
+{% endblock %}

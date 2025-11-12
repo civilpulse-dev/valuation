@@ -1,0 +1,86 @@
+{% extends "report/base.html" %}
+
+{% block title %}Valuation Reports{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-file-alt text-primary me-2"></i>Valuation Reports</h2>
+    <a href="{% url 'report:valuation_create' %}" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>New Report
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">All Valuation Reports ({{ valuations.count }})</h5>
+    </div>
+    <div class="card-body">
+        {% if valuations %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Report Number</th>
+                        <th>Bank Details</th>
+                        <th>Borrower Details</th>
+                        <th>Valuation Date</th>
+                        <th>Properties</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for valuation in valuations %}
+                    <tr>
+                        <td>
+                            <strong>{{ valuation.report_number }}</strong>
+                            {% if valuation.bank_ref_no %}
+                            <br><small class="text-muted">Ref: {{ valuation.bank_ref_no }}</small>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <strong>{{ valuation.bank_name }}</strong>
+                            {% if valuation.bank_branch %}
+                            <br><small class="text-muted">{{ valuation.bank_branch }}</small>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <strong>{{ valuation.borrower_name }}</strong>
+                            {% if valuation.borrower_contact %}
+                            <br><small class="text-muted">📞 {{ valuation.borrower_contact }}</small>
+                            {% endif %}
+                        </td>
+                        <td>{{ valuation.val_date|date:"M d, Y" }}</td>
+                        <td>
+                            <span class="badge bg-primary rounded-pill">
+                                {{ valuation.properties.count }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a href="{% url 'report:valuation_detail' valuation.pk %}" 
+                                   class="btn btn-outline-primary" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="#" class="btn btn-outline-secondary" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-file-alt fa-4x text-muted mb-3"></i>
+            <h4 class="text-muted">No Valuation Reports</h4>
+            <p class="text-muted mb-4">Get started by creating your first valuation report</p>
+            <a href="{% url 'report:valuation_create' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-plus-circle me-2"></i>Create First Report
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

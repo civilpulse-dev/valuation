@@ -1,0 +1,126 @@
+{% extends "report/base.html" %}
+
+{% block title %}Dashboard - Nepali Land Valuation{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-tachometer-alt text-primary me-2"></i>Dashboard</h2>
+    <a href="{% url 'report:valuation_create' %}" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>New Valuation Report
+    </a>
+</div>
+
+<!-- Stats Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card stat-card border-start-primary">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="text-xs fw-bold text-primary text-uppercase mb-1">
+                            Valuation Reports
+                        </div>
+                        <div class="h5 mb-0 fw-bold text-gray-800">{{ stats.valuations }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-file-alt fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card border-start-success">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="text-xs fw-bold text-success text-uppercase mb-1">
+                            Properties
+                        </div>
+                        <div class="h5 mb-0 fw-bold text-gray-800">{{ stats.properties }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-home fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card border-start-info">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="text-xs fw-bold text-info text-uppercase mb-1">
+                            Property Owners
+                        </div>
+                        <div class="h5 mb-0 fw-bold text-gray-800">{{ stats.owners }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-users fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card border-start-warning">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="text-xs fw-bold text-warning text-uppercase mb-1">
+                            Land Plots
+                        </div>
+                        <div class="h5 mb-0 fw-bold text-gray-800">{{ stats.plots }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-map-marked-alt fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-rocket me-2"></i>Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{% url 'report:valuation_create' %}" class="btn btn-outline-primary text-start">
+                        <i class="fas fa-file-alt me-2"></i>Create New Valuation Report
+                    </a>
+                    <a href="{% url 'report:valuation_list' %}" class="btn btn-outline-success text-start">
+                        <i class="fas fa-list me-2"></i>View All Reports
+                    </a>
+                    <a href="{% url 'report:property_list' %}" class="btn btn-outline-info text-start">
+                        <i class="fas fa-home me-2"></i>Manage Properties
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>System Information</h5>
+            </div>
+            <div class="card-body">
+                <p class="mb-2"><strong>Nepali Land Valuation System</strong></p>
+                <p class="text-muted small mb-2">Professional property valuation with Nepali land measurement systems</p>
+                <ul class="small text-muted">
+                    <li>Ropani-Ana-Paisa-Dam (Hilly region)</li>
+                    <li>Bigha-Kattha-Dhur (Terai region)</li>
+                    <li>Automatic area conversion</li>
+                    <li>Market value calculations</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

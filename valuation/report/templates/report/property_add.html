@@ -1,0 +1,89 @@
+{% extends "report/base.html" %}
+
+{% block title %}Add Property - {{ valuation.report_number }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2><i class="fas fa-plus-circle text-primary me-2"></i>Add Property</h2>
+        <p class="text-muted mb-0">{{ valuation.report_number }} - {{ valuation.bank_name }}</p>
+    </div>
+    <div>
+        <a href="{% url 'report:valuation_detail' valuation.pk %}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to Report
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Property Information</h5>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                <h6 class="alert-heading">Please correct the following errors:</h6>
+                <ul class="mb-0">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Property Name *</label>
+                        {{ form.name }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">District *</label>
+                        {{ form.district }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Municipality</label>
+                        {{ form.municipality }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Ward Number</label>
+                        {{ form.ward_no }}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Property Address *</label>
+                        {{ form.address }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Land Type</label>
+                        {{ form.land_type }}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4 pt-3 border-top">
+                <button type="submit" class="btn btn-success btn-lg">
+                    <i class="fas fa-save me-2"></i>Add Property
+                </button>
+                <a href="{% url 'report:valuation_detail' valuation.pk %}" class="btn btn-outline-secondary">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

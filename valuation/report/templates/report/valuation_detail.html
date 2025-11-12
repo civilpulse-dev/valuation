@@ -1,0 +1,278 @@
+{% extends "report/base.html" %}
+
+{% block title %}Valuation Report - {{ valuation.report_number }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2><i class="fas fa-file-alt text-primary me-2"></i>Valuation Report</h2>
+        <p class="text-muted mb-0">{{ valuation.report_number }} - {{ valuation.bank_name }}</p>
+    </div>
+    <div>
+        <a href="{% url 'report:valuation_list' %}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to List
+        </a>
+        <a href="{% url 'report:property_add' valuation.pk %}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Add Property
+        </a>
+    </div>
+</div>
+
+<!-- Report Summary -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h6 class="mb-0"><i class="fas fa-university me-2"></i>Bank Information</h6>
+            </div>
+            <div class="card-body">
+                <p><strong>Bank Name:</strong> {{ valuation.bank_name }}</p>
+                <p><strong>Branch:</strong> {{ valuation.bank_branch|default:"Not specified" }}</p>
+                <p><strong>Reference No:</strong> {{ valuation.bank_ref_no|default:"Not specified" }}</p>
+                <p><strong>Request Date:</strong> {{ valuation.bank_req_date|date:"M d, Y"|default:"Not specified" }}</p>
+                {% if valuation.bank_address %}
+                <p><strong>Address:</strong> {{ valuation.bank_address }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h6 class="mb-0"><i class="fas fa-user me-2"></i>Borrower Information</h6>
+            </div>
+            <div class="card-body">
+                <p><strong>Borrower Name:</strong> {{ valuation.borrower_name }}</p>
+                <p><strong>Contact:</strong> {{ valuation.borrower_contact|default:"Not specified" }}</p>
+                <p><strong>PAN:</strong> {{ valuation.borrower_pan|default:"Not specified" }}</p>
+                <p><strong>Citizenship:</strong> {{ valuation.borrower_citizenship|default:"Not specified" }}</p>
+                <p><strong>Valuation Date:</strong> {{ valuation.val_date|date:"M d, Y" }}</p>
+                {% if valuation.borrower_address %}
+                <p><strong>Address:</strong> {{ valuation.borrower_address }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Properties Section -->
+<div class="card mb-4">
+    <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+        <h6 class="mb-0"><i class="fas fa-home me-2"></i>Properties ({{ valuation.properties.count }})</h6>
+        <a href="{% url 'report:property_add' valuation.pk %}" class="btn btn-light btn-sm">
+            <i class="fas fa-plus me-2"></i>Add Property
+        </a>
+    </div>
+    <div class="card-body">
+        {% if valuation.properties.all %}
+            {% for property in valuation.properties.all %}
+            <div class="property-section border rounded p-3 mb-3">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="text-info mb-0">{{ property.name }}</h5>
+                    <a href="{% url 'report:property_edit' property.pk %}" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-edit me-1"></i>Manage Property
+                    </a>
+                </div>
+                <p class="mb-2"><strong>Address:</strong> {{ property.address }}</p>
+                <p class="mb-2"><strong>District:</strong> {{ property.district }}</p>
+                {% if property.municipality %}
+                <p class="mb-2"><strong>Municipality:</strong> {{ property.municipality }}</p>
+                {% endif %}
+                <p class="mb-2"><strong>Ward No:</strong> {{ property.ward_no }}</p>
+                <p class="mb-2"><strong>Land Type:</strong> 
+                    <span class="badge bg-secondary">{{ property.get_land_type_display }}</span>
+                </p>
+                
+                <!-- Owners -->
+                {% if property.owners.all %}
+                <h6 class="mt-3 text-success">
+                    <i class="fas fa-users me-2"></i>Owners ({{ property.owners.count }})
+                </h6>
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Name</th>
+                                <th>Contact</th>
+                                <th>Citizenship</th>
+                                <th>PAN</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for owner in property.owners.all %}
+                            <tr>
+                                <td>{{ owner.name }}</td>
+                                <td>{{ owner.contact_number|default:"-" }}</td>
+                                <td>{{ owner.citizenship_number|default:"-" }}</td>
+                                <td>{{ owner.pan_number|default:"-" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-warning mt-3">
+                    <i class="fas fa-exclamation-triangle me-2"></i>No owners added to this property.
+                </div>
+                {% endif %}
+
+                <!-- Plots -->
+                {% if property.plots.all %}
+                <h6 class="mt-3 text-warning">
+                    <i class="fas fa-map-marked-alt me-2"></i>Land Plots ({{ property.plots.count }})
+                </h6>
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Plot No</th>
+                                <th>Area</th>
+                                <th>Market Rate</th>
+                                <th>Fair Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for plot in property.plots.all %}
+                            <tr>
+                                <td>
+                                    <strong>{{ plot.plot_number }}</strong>
+                                    {% if plot.sheet_number %}
+                                    <br><small class="text-muted">Sheet: {{ plot.sheet_number }}</small>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if plot.ropani > 0 or plot.ana > 0 %}
+                                        {{ plot.ropani }}-{{ plot.ana }}-{{ plot.paisa }}-{{ plot.dam }} (R-A-P-D)
+                                        <br><small class="text-muted">{{ plot.area_sqft|floatformat:2 }} sq.ft</small>
+                                    {% elif plot.bigha > 0 or plot.kattha > 0 %}
+                                        {{ plot.bigha }}-{{ plot.kattha }}-{{ plot.dhur }} (B-K-D)
+                                        <br><small class="text-muted">{{ plot.area_sqft|floatformat:2 }} sq.ft</small>
+                                    {% else %}
+                                        {{ plot.area_sqft|floatformat:2 }} sq.ft
+                                    {% endif %}
+                                </td>
+                                <td>Rs. {{ plot.market_rate_per_sqft|floatformat:2 }}/sq.ft</td>
+                                <td><strong>Rs. {{ plot.fair_market_value|floatformat:2 }}</strong></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Property Summary -->
+                <div class="mt-3 p-2 bg-light rounded">
+                    <div class="row text-center">
+                        <div class="col-md-4">
+                            <strong>Total Area</strong><br>
+                            {{ property.total_area_sqft|floatformat:2 }} sq.ft
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Total Value</strong><br>
+                            Rs. {{ property.total_value|floatformat:2 }}
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Avg Rate</strong><br>
+                            {% if property.total_area_sqft > 0 %}
+                                {% widthratio property.total_value 1 property.total_area_sqft as avg_rate %}
+                                Rs. {{ avg_rate|floatformat:2 }}/sq.ft
+                            {% else %}
+                                Rs. 0.00/sq.ft
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="alert alert-warning mt-3">
+                    <i class="fas fa-exclamation-triangle me-2"></i>No land plots added to this property.
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-home fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">No Properties Added</h4>
+                <p class="text-muted mb-4">Start by adding properties to this valuation report</p>
+                <a href="{% url 'report:property_add' valuation.pk %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-plus me-2"></i>Add First Property
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Visiting Team Section -->
+{% if valuation.visiting_teams.all %}
+<div class="card">
+    <div class="card-header bg-secondary text-white">
+        <h6 class="mb-0"><i class="fas fa-users me-2"></i>Visiting Team ({{ valuation.visiting_teams.count }})</h6>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            {% for member in valuation.visiting_teams.all %}
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-title">{{ member.member_name }}</h6>
+                        <p class="card-text mb-1">
+                            <strong>Designation:</strong> {{ member.designation }}
+                        </p>
+                        {% if member.contact_number %}
+                        <p class="card-text mb-0">
+                            <strong>Contact:</strong> {{ member.contact_number }}
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Total Valuation Summary -->
+{% if valuation.properties.all %}
+<div class="card mt-4 border-success">
+    <div class="card-header bg-success text-white">
+        <h6 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Valuation Summary</h6>
+    </div>
+    <div class="card-body">
+        <div class="row text-center">
+            <div class="col-md-3">
+                <h4 class="text-success">{{ valuation.properties.count }}</h4>
+                <p class="mb-0 text-muted">Properties</p>
+            </div>
+            <div class="col-md-3">
+                <h4 class="text-primary">
+                    {% with total_owners=0 %}
+                        {% for property in valuation.properties.all %}
+                            {% with total_owners=total_owners|add:property.owners.count %}
+                            {% endwith %}
+                        {% endfor %}
+                        {{ total_owners }}
+                    {% endwith %}
+                </h4>
+                <p class="mb-0 text-muted">Total Owners</p>
+            </div>
+            <div class="col-md-3">
+                <h4 class="text-info">
+                    {% with total_plots=0 %}
+                        {% for property in valuation.properties.all %}
+                            {% with total_plots=total_plots|add:property.plots.count %}
+                            {% endwith %}
+                        {% endfor %}
+                        {{ total_plots }}
+                    {% endwith %}
+                </h4>
+                <p class="mb-0 text-muted">Total Plots</p>
+            </div>
+            <div class="col-md-3">
+                <h4 class="text-warning">Rs. {{ valuation.total_valuation|floatformat:2 }}</h4>
+                <p class="mb-0 text-muted">Total Valuation</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

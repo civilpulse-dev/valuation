@@ -1,0 +1,68 @@
+{% extends "report/base.html" %}
+
+{% block title %}Properties List{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-home text-primary me-2"></i>Properties List</h2>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">All Properties ({{ properties.count }})</h5>
+    </div>
+    <div class="card-body">
+        {% if properties %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Property Name</th>
+                        <th>Address & District</th>
+                        <th>Valuation Report</th>
+                        <th>Owners</th>
+                        <th>Plots</th>
+                        <th>Total Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for property in properties %}
+                    <tr>
+                        <td>
+                            <strong>{{ property.name }}</strong>
+                        </td>
+                        <td>
+                            <small class="d-block">{{ property.address|truncatewords:5 }}</small>
+                            <small class="text-muted">{{ property.district }}</small>
+                        </td>
+                        <td>
+                            <strong>{{ property.valuation.bank_name }}</strong>
+                            <br><small class="text-muted">{{ property.valuation.report_number }}</small>
+                        </td>
+                        <td>
+                            <span class="badge bg-info rounded-pill">{{ property.owner_count }}</span>
+                        </td>
+                        <td>
+                            <span class="badge bg-primary rounded-pill">{{ property.plot_count }}</span>
+                        </td>
+                        <td>
+                            <strong>Rs. {{ property.total_value|floatformat:2 }}</strong>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-home fa-4x text-muted mb-3"></i>
+            <h4 class="text-muted">No Properties Found</h4>
+            <p class="text-muted">Properties will appear when you create valuation reports</p>
+            <a href="{% url 'report:valuation_create' %}" class="btn btn-primary">
+                <i class="fas fa-plus-circle me-2"></i>Create Valuation Report
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

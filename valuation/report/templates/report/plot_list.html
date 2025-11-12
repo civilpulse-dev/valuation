@@ -1,0 +1,69 @@
+{% extends "report/base.html" %}
+
+{% block title %}Land Plots{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-map-marked-alt text-primary me-2"></i>Land Plots</h2>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">All Land Plots ({{ plots.count }})</h5>
+    </div>
+    <div class="card-body">
+        {% if plots %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Plot Number</th>
+                        <th>Property & Bank</th>
+                        <th>Area Measurement</th>
+                        <th>Area (Sq.Ft)</th>
+                        <th>Market Rate</th>
+                        <th>Fair Market Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for plot in plots %}
+                    <tr>
+                        <td>
+                            <strong>{{ plot.plot_number }}</strong>
+                        </td>
+                        <td>
+                            <strong>{{ plot.property.name }}</strong>
+                            <br><small class="text-muted">{{ plot.property.valuation.bank_name }}</small>
+                        </td>
+                        <td>
+                            {% if plot.ropani > 0 or plot.ana > 0 %}
+                                <span class="badge bg-info">R-A-P-D: {{ plot.ropani }}-{{ plot.ana }}-{{ plot.paisa }}-{{ plot.dam }}</span>
+                            {% elif plot.bigha > 0 or plot.kattha > 0 %}
+                                <span class="badge bg-success">B-K-D: {{ plot.bigha }}-{{ plot.kattha }}-{{ plot.dhur }}</span>
+                            {% else %}
+                                <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ plot.area_sqft|floatformat:2 }}</td>
+                        <td>Rs. {{ plot.market_rate_per_sqft|floatformat:2 }}</td>
+                        <td>
+                            <strong>Rs. {{ plot.fair_market_value|floatformat:2 }}</strong>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-map-marked-alt fa-4x text-muted mb-3"></i>
+            <h4 class="text-muted">No Land Plots Found</h4>
+            <p class="text-muted">Plots will appear when you add them to properties</p>
+            <a href="{% url 'report:property_list' %}" class="btn btn-primary">
+                <i class="fas fa-home me-2"></i>View Properties
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

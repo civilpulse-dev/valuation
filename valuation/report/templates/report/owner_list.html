@@ -1,0 +1,73 @@
+{% extends "report/base.html" %}
+
+{% block title %}Property Owners{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-users text-primary me-2"></i>Property Owners</h2>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">All Property Owners ({{ owners.count }})</h5>
+    </div>
+    <div class="card-body">
+        {% if owners %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Owner Name</th>
+                        <th>Property Details</th>
+                        <th>Contact Information</th>
+                        <th>Citizenship/PAN</th>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for owner in owners %}
+                    <tr>
+                        <td>
+                            <strong>{{ owner.name }}</strong>
+                        </td>
+                        <td>
+                            <strong>{{ owner.property.name }}</strong>
+                            <br><small class="text-muted">{{ owner.property.valuation.bank_name }}</small>
+                        </td>
+                        <td>
+                            {% if owner.contact_number %}
+                            <i class="fas fa-phone text-success me-1"></i>{{ owner.contact_number }}
+                            {% else %}
+                            <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if owner.citizenship_number %}
+                            <small class="badge bg-secondary">Citizenship: {{ owner.citizenship_number }}</small>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if owner.address %}
+                            <small>{{ owner.address|truncatewords:8 }}</small>
+                            {% else %}
+                            <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-users fa-4x text-muted mb-3"></i>
+            <h4 class="text-muted">No Property Owners Found</h4>
+            <p class="text-muted">Owners will appear when you add them to properties</p>
+            <a href="{% url 'report:property_list' %}" class="btn btn-primary">
+                <i class="fas fa-home me-2"></i>View Properties
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

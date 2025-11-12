@@ -1,0 +1,312 @@
+/* Custom CSS for Nepali Land Valuation System */
+
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --success-color: #27ae60;
+    --info-color: #17a2b8;
+    --warning-color: #f39c12;
+    --danger-color: #e74c3c;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+}
+
+/* General Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    background: linear-gradient(180deg, var(--primary-color) 0%, #1a252f 100%);
+    min-height: 100vh;
+    padding: 0;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+}
+
+.sidebar-brand {
+    padding: 20px;
+    color: white;
+    border-bottom: 1px solid #34495e;
+    background: rgba(255,255,255,0.05);
+}
+
+.sidebar-brand h5 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.nav-link {
+    color: #bdc3c7;
+    padding: 15px 20px;
+    border-left: 4px solid transparent;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.nav-link:hover {
+    color: white;
+    background: rgba(52, 152, 219, 0.1);
+    border-left: 4px solid var(--secondary-color);
+}
+
+.nav-link.active {
+    color: white;
+    background: rgba(52, 152, 219, 0.2);
+    border-left: 4px solid var(--secondary-color);
+}
+
+.nav-link i {
+    width: 20px;
+    margin-right: 10px;
+    text-align: center;
+}
+
+/* Card Styles */
+.stat-card {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.stat-card .card-body {
+    padding: 1.5rem;
+}
+
+.border-start-primary { border-left-color: var(--secondary-color) !important; }
+.border-start-success { border-left-color: var(--success-color) !important; }
+.border-start-info { border-left-color: var(--info-color) !important; }
+.border-start-warning { border-left-color: var(--warning-color) !important; }
+
+/* Table Styles */
+.table-hover tbody tr:hover {
+    background-color: rgba(52, 152, 219, 0.05);
+}
+
+.table th {
+    border-top: none;
+    font-weight: 600;
+    color: var(--primary-color);
+    background-color: #f8f9fa;
+}
+
+/* Button Styles */
+.btn {
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, var(--secondary-color), #2980b9);
+    border: none;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(45deg, #2980b9, var(--secondary-color));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+}
+
+.btn-success {
+    background: linear-gradient(45deg, var(--success-color), #219653);
+    border: none;
+}
+
+.btn-success:hover {
+    background: linear-gradient(45deg, #219653, var(--success-color));
+    transform: translateY(-2px);
+}
+
+/* Form Styles */
+.form-control, .form-select {
+    border-radius: 6px;
+    border: 1px solid #e1e5e9;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+/* Badge Styles */
+.badge {
+    font-weight: 500;
+    padding: 0.5em 0.75em;
+}
+
+.badge.bg-primary {
+    background: linear-gradient(45deg, var(--secondary-color), #2980b9) !important;
+}
+
+.badge.bg-success {
+    background: linear-gradient(45deg, var(--success-color), #219653) !important;
+}
+
+.badge.bg-info {
+    background: linear-gradient(45deg, var(--info-color), #138496) !important;
+}
+
+.badge.bg-warning {
+    background: linear-gradient(45deg, var(--warning-color), #e67e22) !important;
+}
+
+/* Alert Styles */
+.alert {
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.alert-success {
+    background: linear-gradient(45deg, #d4edda, #c3e6cb);
+    color: #155724;
+}
+
+.alert-danger {
+    background: linear-gradient(45deg, #f8d7da, #f1b0b7);
+    color: #721c24;
+}
+
+.alert-warning {
+    background: linear-gradient(45deg, #fff3cd, #ffeaa7);
+    color: #856404;
+}
+
+.alert-info {
+    background: linear-gradient(45deg, #d1ecf1, #b8e2e8);
+    color: #0c5460;
+}
+
+/* Card Header Styles */
+.card-header {
+    background: linear-gradient(45deg, white, #f8f9fa);
+    border-bottom: 1px solid #e9ecef;
+    font-weight: 600;
+    padding: 1rem 1.5rem;
+}
+
+.card-header.bg-primary {
+    background: linear-gradient(45deg, var(--secondary-color), #2980b9) !important;
+    color: white;
+}
+
+.card-header.bg-success {
+    background: linear-gradient(45deg, var(--success-color), #219653) !important;
+    color: white;
+}
+
+.card-header.bg-info {
+    background: linear-gradient(45deg, var(--info-color), #138496) !important;
+    color: white;
+}
+
+/* Property Section Styles */
+.property-section {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.property-section:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border-color: var(--secondary-color);
+}
+
+/* Empty State Styles */
+.empty-state {
+    padding: 3rem 1rem;
+    text-align: center;
+}
+
+.empty-state i {
+    opacity: 0.5;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sidebar {
+        min-height: auto;
+    }
+    
+    .stat-card {
+        margin-bottom: 1rem;
+    }
+    
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .sidebar, .btn, .alert {
+        display: none !important;
+    }
+    
+    .card {
+        border: 1px solid #000 !important;
+        box-shadow: none !important;
+    }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--secondary-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #2980b9;
+}
+
+/* Loading Animation */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Nepali Measurement Badges */
+.badge-rapd {
+    background: linear-gradient(45deg, #8e44ad, #9b59b6);
+    color: white;
+}
+
+.badge-bkd {
+    background: linear-gradient(45deg, #e67e22, #f39c12);
+    color: white;
+}
